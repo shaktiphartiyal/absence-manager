@@ -1,0 +1,162 @@
+<div class="row">
+    <div class="col-md-12">
+      <system-data-box [loading]="loadingState" [title]="'Users'" [addButton]="true" (onAdd)="handleOnAdd();">
+        <div class="table-responsive">
+          <system-grid
+            #userGrid
+            [data]="gridData.data"
+            [columns]="gridData.columns"
+            [tableClass]="'table table-sm'"
+            [gridConfig]="gridData.config"
+            [total]="gridData.total"
+            (onPageChange)="handlePageChange($event)"
+            (onSort)="handleOnSort($event)"
+        >
+          <tr *ngFor="let data of gridData.data" (click)="handleRowClick(data)">
+            <td>{{data.id}}</td>
+            <td>{{data.name}}</td>
+            <td><span>{{data.signum}}</span></td>
+            <td>{{data.email}}</td>
+            <td>{{data.manager_name}}</td>
+            <td>{{data.is_admin === 1 ? 'Admin' : 'User'}}</td>
+            <td>{{data.team_name}}</td>
+            <td>
+                <span class="col">
+                    <ng-container *ngIf="data.active == 0">
+                    <i class="fa fa-times text-danger" title="Inactive"></i>
+                    </ng-container>
+                    <ng-container *ngIf="data.active == 1">
+                    <i class="fa fa-check text-success" title="Active"></i>
+                    </ng-container>
+                </span>
+              </td>
+            <td>
+              <button title="Delete" class="btn btn-danger system-grid-btn" (click)="$event.stopPropagation(); delete(data)" type="button">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </system-grid>
+        </div>
+      </system-data-box>
+    </div>
+  </div>
+  <system-popup-container
+      [editMode]="editMode"
+      *ngIf="addPopup"
+      (onCancel)="handleOnAddClose()"
+      [title]="'User Details'"
+      [formRef]="tdForm"
+      [width]="'700px'"
+      [saveButton]="true"
+  >
+    <form #tdForm="ngForm" (ngSubmit)="tdForm.form.valid && handleOnPopupSave()">
+      <div class="row">
+        <div class="col-md-12">
+          <system-textbox
+          [formRef]="tdForm"
+          name="id"
+          [label]="'User Id'"
+          [(ngModel)]="model.id"
+          [readOnly]="true"
+          [labelClass]="'col-md-3'"
+          [inputClass]="'col-md-9'"
+          ></system-textbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+            <system-textbox
+            [formRef]="tdForm"
+            name="name"
+            [required]="true"
+            [label]="'Name'"
+            [(ngModel)]="model.name"
+            [labelClass]="'col-md-3'"
+            [inputClass]="'col-md-9'"
+            ></system-textbox>
+          </div>  
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+            <system-textbox
+            [formRef]="tdForm"
+            name="signum"
+            [required]="true"
+            [label]="'Signum'"
+            [(ngModel)]="model.signum"
+            [labelClass]="'col-md-3'"
+            [inputClass]="'col-md-9'"
+            ></system-textbox>
+          </div>  
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+            <system-textbox
+            [type]="'email'"
+            [formRef]="tdForm"
+            name="email"
+            [required]="true"
+            [label]="'Email'"
+            [(ngModel)]="model.email"
+            [labelClass]="'col-md-3'"
+            [inputClass]="'col-md-9'"
+            ></system-textbox>
+          </div>  
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <system-radio [formRef]="tdForm"
+          name="active"
+          [label]="'Status'"
+          [(ngModel)]="model.active"
+          [options]="activeData"
+          [inLine]="true"
+          [labelClass]="'col-md-3'"
+          [inputClass]="'col-md-9'"
+          >
+          </system-radio>
+        </div>
+      </div>
+      <div class="row" *ngIf="isAdmin">
+        <div class="col-md-12">
+          <system-dropdown-list
+          [formRef]="tdForm"
+          name="manager_name"
+          [label]="'Manager'"
+          [(ngModel)]="model.manager_id"
+          [data]="managers"
+          [inLine]="true"
+          [required]="true"
+          [labelClass]="'col-md-3'"
+          [inputClass]="'col-md-9'">
+          </system-dropdown-list>
+        </div>
+      </div>
+      <div class="row" *ngIf="isAdmin">
+          <div class="col-md-12">
+            <system-dropdown-list
+            [formRef]="tdForm"
+            name="userType"
+            [label]="'User type'"
+            [(ngModel)]="model.is_admin"
+            [data]="userType"
+            [inLine]="true"
+            [labelClass]="'col-md-3'"
+            [inputClass]="'col-md-9'">
+            </system-dropdown-list>
+          </div>
+      </div>
+      <div class="row">
+          <system-dropdown-list
+          [(ngModel)]="model.team_id"
+          [label]="'Add to team'"
+          name="team"
+          [data]="allTeams"
+          [labelClass]="'col-md-3'"
+          [inputClass]="'col-md-9'"
+          ></system-dropdown-list>
+      </div>
+    </form>
+  </system-popup-container>
+  

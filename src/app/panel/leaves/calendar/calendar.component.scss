@@ -1,0 +1,48 @@
+.selectable-cell {
+    cursor: cell;
+}
+
+.selectable-cell:hover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(165, 233, 185, 0.3);
+    z-index: 1;
+    border: 1px solid black;
+}
+
+.selected {
+    background-color: rgb(255 165 0 / 85%) !important;
+}
+
+.applied {
+    background-color: rgba(11, 186, 255, 0.85);
+}
+
+.approved {
+    background-color: rgba(31, 255, 11, 0.85);
+}
+
+.rejected {
+    background-color: rgb(255, 62, 62);
+}
+
+.legend {
+
+}
+
+.legend > .cell {
+    min-height: 20px;
+    min-width: 20px;
+    border: 1px solid black;
+    display: inline-block;
+}
+.legend > i {
+    font-style: normal;
+    padding: 5px;
+    position: relative;
+    top: -4px;
+}

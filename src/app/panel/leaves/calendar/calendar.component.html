@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col col-12 pb-4">
+        <div class="legend">
+            <span class="cell selected"></span> <i>Selected</i>&nbsp;
+            <span class="cell applied"></span> <i>Applied</i>&nbsp;
+            <span class="cell approved"></span> <i>Approved</i>&nbsp;
+            <span class="cell rejected"></span> <i>Rejected</i>&nbsp;
+            
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-4 pb-4" *ngFor="let month of months; let monthIndex = index;">
+        <table class="table table-bordered table-group-divider">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="7">{{month.name}}</th>
+                </tr>
+                <tr>
+                    <th class="text-center" *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; let dayIndex = index;">{{day}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dateArray of getWeeksArray(monthIndex+1); let weekIndex = index;">
+                    <ng-container *ngFor="let date of dateArray">
+                        <ng-container *ngIf="date.day !== 0; then thenBlock else elseBlock"></ng-container>
+                        <ng-template #thenBlock>
+                            <td
+                            (click)="selectDate(date.date)"
+                            class="text-center selectable-cell col-1"
+                            scope="col"
+                            [ngClass]="{'selected': isElementSelected(date.date!), 'applied': isDateApplied(date.date!), 'approved': isDateApproved(date.date!), 'rejected': isDateRejected(date.date!)}"
+                            >
+                                {{date.day}}
+                            </td>
+                        </ng-template>
+                        <ng-template #elseBlock><td></td></ng-template>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>      
+    </div>
+</div>
+<hr>
+  

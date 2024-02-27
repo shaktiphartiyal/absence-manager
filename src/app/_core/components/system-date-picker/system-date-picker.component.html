@@ -1,0 +1,15 @@
+<div class="form-group" [ngClass]="{'row': inLine}">
+    <div class="{{labelClass}}" *ngIf="label">
+        <label>
+            {{label}}:<span class="required" *ngIf="required">*</span>
+        </label>
+    </div>
+    <div class="{{inputClass}}">
+        <input class="form-control" type="date" [tabIndex]="tabIndex" [placeholder]="placeholder" [ngClass]="{'validation-border': (!datePicker.valid && formRef?.submitted)}" #datePicker="ngModel" [readonly]="readOnly" [required]="required" [disabled]="disabled" [value]="value" [(ngModel)]="value">
+        <div class="row" [hidden]="!(!datePicker.valid && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">This field is required.</span>
+            </div>
+        </div>
+    </div>
+</div>

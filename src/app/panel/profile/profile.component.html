@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-md-12">
+      <system-data-box [loading]="loadingState" [title]="pageTitle" [cancelButton]="false" [saveButton]="false" [formRef]="upForm">
+        <form #upForm="ngForm" (ngSubmit)="upForm.form.valid && onSave()">
+            <div class="row">
+              <div class="col-md-4">
+                <system-textbox
+                [labelClass]="'col-md-3'"
+                [inputClass]="'col-md-9'"
+                 [formRef]="upForm" name="username" [label]="'Email'" [(ngModel)]="model.username" [required]="true" [readOnly]="true"></system-textbox>
+              </div>
+              <div class="col-md-4">
+                <system-textbox
+                [labelClass]="'col-md-3'"
+                [inputClass]="'col-md-9'"
+                 [formRef]="upForm" name="name" [label]="'Name'" [(ngModel)]="model.name" [required]="true" [readOnly]="true"></system-textbox>
+              </div>
+              <div class="col-md-4">
+                <system-textbox
+                [labelClass]="'col-md-3'"
+                [inputClass]="'col-md-9'"
+                 [formRef]="upForm" name="signum" [label]="'Signum'" [(ngModel)]="model.signum" [required]="true" [readOnly]="true"></system-textbox>
+              </div>
+            </div>
+            <hr>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <strong><u>Change Password</u></strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="6">
+                          <system-textbox [required]="true" [type]="'password'" [formRef]="upForm" name="currentpassword" [label]="'Current password'" [(ngModel)]="currentPassword"></system-textbox>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="6">
+                              <system-textbox [required]="true" [type]="'password'" [formRef]="upForm" name="newpassword" [label]="'New password'" [(ngModel)]="newPassword"></system-textbox>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="6">
+                              <system-textbox [required]="true" [type]="'password'" [formRef]="upForm" name="confirmnewpassword" [label]="'Confirm new password'" [(ngModel)]="confirmNewPassword"></system-textbox>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="6">
+                              <button type="submit" class="btn btn-primary">Change Password</button>
+                          </div>
+                      </div>
+                </div>
+                <div class="col-md-6">
+                    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                        {{errorMessage}}
+                    </div>
+                </div>
+          </div>
+        </form>
+      </system-data-box>
+    </div>
+  </div>

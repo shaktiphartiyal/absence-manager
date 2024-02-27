@@ -1,0 +1,42 @@
+.validation-border, validation-border:focus {
+    border: 1px solid red !important;
+    outline: none;
+    background-image: linear-gradient(to right, #ff99668e, #ff5e61af) !important
+}
+
+
+.validation-message {
+    font-size: small !important;
+    color: red !important;
+}
+
+.required {
+    font-size: smaller;
+    color: red !important;
+}
+
+
+.system-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 1.5px);
+    padding: 0.275rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #000000;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+select.system-control:disabled {
+    background: #eee !important;
+}
+
+
+input:read-only {
+    background-color: #dedede;
+}

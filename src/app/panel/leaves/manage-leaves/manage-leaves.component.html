@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col col-2">
+        <button class="btn btn-primary" (click)="applySelectedLeaves()" [ngClass]="{'disabled': selectedDates.length === 0 || applyForLeavesDisabled}" [disabled]="selectedDates.length === 0">Apply selected leaves</button>
+    </div>
+    <div class="col col-2">
+        <button class="btn btn-warning" (click)="cancelSelectedLeaves()" [ngClass]="{'disabled': selectedDates.length === 0 || cancelLeavesDisabled}" [disabled]="selectedDates.length === 0">Cancel selected leaves</button>
+    </div>
+</div>
+<hr>
+<app-calendar
+#calendar
+[year]="selectedYear"
+[appliedLeaves]="appliedLeaves"
+[approvedLeaves]="approvedLeaves"
+[rejectedLeaves]="rejectedLeaves"
+(datesSelected)="datesSelected($event)"
+></app-calendar>
+<system-popup-container
+    *ngIf="openPopup"
+    (onCancel)="handleOnPopupClose()"
+    [title]="popupTitle"
+    [formRef]="pmdForm"
+    [width]="'700px'"
+    [saveButton]="true"
+    [loading]="loading"
+>
+<div class="row">
+    <div class="col-md-12 mb-2">
+        <ng-template *ngIf="action === 'APPLY'">
+            Applying leaves for:
+        </ng-template>
+        <ng-template *ngIf="action === 'CANCEL'">
+            Cancelling leaves for:
+        </ng-template>        
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ng-container *ngFor="let date of selectedDates; let i = index;">
+            <span class="badge rounded-pill bg-primary">
+                {{date | systemDate}}
+                <span class="pill-button" (click)="removeSelectedDateByIndex(i)">
+                    &times;
+                </span>
+            </span>&nbsp;
+        </ng-container>
+    </div>
+</div>
+<hr>
+<form action="" (ngSubmit)="pmdForm.form.valid && handleOnSave()" #pmdForm="ngForm">
+    <system-textarea
+    name="reson"
+    [formRef]="pmdForm"
+    [(ngModel)]="reason"
+    [required]="true"
+    [label]="'Reason'"
+    [labelClass]="'col-md-2'"
+    [inputClass]="'col-md-10'"
+    ></system-textarea>
+</form>
+</system-popup-container>

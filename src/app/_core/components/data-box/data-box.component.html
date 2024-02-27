@@ -1,0 +1,26 @@
+<div class="card mb-12">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-4">
+        <span class="col-form-label title">{{title}}</span>
+        &nbsp;
+        <span *ngIf="loading === true">
+          <system-loader></system-loader>
+        </span>
+      </div>
+      <div class="col-md-8 text-right">
+        <button *ngIf="addButton" (click)="emitAddClick()" type="button" class="btn btn-sm btn-warning data-box-control-btn mr-1" title="Add"><i class="fa fa-plus"></i> Add</button>
+        <button *ngIf="saveButton" (click)="emitSaveClick()" type="button" class="btn btn-sm btn-success data-box-control-btn mr-1" title="Save"><i class="fa fa-save"></i> Save</button>
+        <button *ngIf="cancelButton" (click)="emitCancelClick()" type="button" class="btn btn-sm btn-danger data-box-control-btn mr-1" title="Cancel"><i class="fa fa-times"></i> Cancel</button>
+        <ng-container *ngFor="let customButton of customButtons">
+          <button *ngIf="customButton.show" [disabled]="customButton.disabled" (click)="emitCustomButtonEvent(customButton.clickEventId)" type="button" class="{{customButton.buttonClass}}" title="{{customButton?.buttonText}}"><i *ngIf="customButton.showButtonIcon" class="{{customButton?.buttonIconClass}}"></i> <ng-container *ngIf="customButton.showButtonText">&nbsp;{{customButton?.buttonText}}</ng-container></button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <fieldset [disabled]="disabled">
+      <ng-content></ng-content>
+    </fieldset>
+  </div>
+</div>

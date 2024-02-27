@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-12">
+      <system-data-box [loading]="loadingState" [title]="'Teams'" [addButton]="true" (onAdd)="handleOnAdd();">
+        <div class="table-responsive">
+          <system-grid
+            #teamGrid
+            [data]="gridData.data"
+            [columns]="gridData.columns"
+            [tableClass]="'table table-sm'"
+            [gridConfig]="gridData.config"
+            [total]="gridData.total"
+            (onPageChange)="handlePageChange($event)"
+            (onSort)="handleOnSort($event)"
+        >
+          <tr *ngFor="let data of gridData.data" (click)="handleRowClick(data)">
+            <td>{{data.id}}</td>
+            <td>{{data.name}}</td>
+            <td><span class="col">{{data.members_count ? data.members_count : 0}}</span></td>
+            <td>
+                <span class="col">
+                    <ng-container *ngIf="data.status == 0">
+                    <i class="fa fa-times text-danger" title="Inactive"></i>
+                    </ng-container>
+                    <ng-container *ngIf="data.status == 1">
+                    <i class="fa fa-check text-success" title="Active"></i>
+                    </ng-container>
+                </span>
+              </td>
+            <td>
+              <button title="Delete" class="btn btn-danger system-grid-btn" (click)="$event.stopPropagation(); delete(data)" type="button">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </system-grid>
+        </div>
+      </system-data-box>
+    </div>
+  </div>
+  <system-popup-container
+      [editMode]="editMode"
+      *ngIf="addPopup"
+      (onCancel)="handleOnAddClose()"
+      [title]="'Team Details'"
+      [formRef]="tdForm"
+      [width]="'700px'"
+      [saveButton]="true"
+  >
+    <form #tdForm="ngForm" (ngSubmit)="tdForm.form.valid && handleOnPopupSave()">
+      <div class="row">
+        <div class="col-md-12">
+          <system-textbox
+          [formRef]="tdForm"
+          name="id"
+          [label]="'Team Id'"
+          [(ngModel)]="model.id"
+          [readOnly]="true"
+          [labelClass]="'col-md-3'"
+          [inputClass]="'col-md-9'"
+          ></system-textbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+            <system-textbox
+            [formRef]="tdForm"
+            name="name"
+            [required]="true"
+            [label]="'Team name'"
+            [(ngModel)]="model.name"
+            [labelClass]="'col-md-3'"
+            [inputClass]="'col-md-9'"
+            ></system-textbox>
+          </div>  
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <system-radio [formRef]="tdForm"
+          name="active"
+          [label]="'Status'"
+          [(ngModel)]="model.status"
+          [options]="activeData"
+          [inLine]="true"
+          [labelClass]="'col-md-3'"
+          [inputClass]="'col-md-9'"
+          >
+          </system-radio>
+        </div>
+      </div>
+    </form>
+  </system-popup-container>
+  

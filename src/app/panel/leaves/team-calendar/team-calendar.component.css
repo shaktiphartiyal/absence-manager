@@ -1,0 +1,30 @@
+.cell {
+    max-width: 30px;
+    max-height: 30px;
+}
+
+
+.applied {
+    background-color: rgba(11, 186, 255, 0.85);
+}
+
+.approved {
+    background-color: rgba(31, 255, 11, 0.85);
+}
+
+.legend {
+
+}
+
+.legend > .cell {
+    min-height: 20px;
+    min-width: 20px;
+    border: 1px solid black;
+    display: inline-block;
+}
+.legend > i {
+    font-style: normal;
+    padding: 5px;
+    position: relative;
+    top: -4px;
+}

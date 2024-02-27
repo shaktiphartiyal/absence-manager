@@ -1,0 +1,32 @@
+<div class="form-group" [ngClass]="{'row': inLine}">
+    <div class="{{labelClass}}" *ngIf="label">
+        <label>
+            {{label}}:<span class="required" *ngIf="required">*</span>
+        </label>
+    </div>
+    <div class="{{inputClass}}">
+        <div style="display:flex;">
+            <input class="system-control" [tabIndex]="tabIndex" [placeholder]="placeholder" [ngClass]="{'validation-border': (!txtBox.valid && formRef?.submitted) || (type=='email' && !emailValid && formRef?.submitted) || (type=='number' && !numberValid && formRef?.submitted)}" #txtBox="ngModel" [disabled]="disabled" [readonly]="readOnly" [attr.type]="type" [attr.maxLength]="maxLength? maxLength:null" [(ngModel)]="value" [required]="required" />
+
+            <span *ngIf="iconTooltip" style="padding:7px 0px 0px 5px;" data-toggle="tooltip" [attr.data-placement]="'top'" [attr.data-original-title]="iconTooltip" title="{{iconTooltip}}" class="icon-basic_information_2 info-icon"></span>
+        </div>
+
+
+
+        <div class="row" [hidden]="!(!txtBox.valid && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">This field is required.</span>
+            </div>
+        </div>
+        <div class="row" [hidden]="!(txtBox.valid && !emailValid && type=='email' && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">Email is invalid.</span>
+            </div>
+        </div>
+        <div class="row" [hidden]="!(txtBox.valid && !numberValid && type=='number' && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">Invalid numeric value.</span>
+            </div>
+        </div>
+    </div>
+</div>

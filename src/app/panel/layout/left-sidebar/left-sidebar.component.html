@@ -1,0 +1,37 @@
+<div id="layoutSidenav_nav">
+  <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+      <div class="nav">
+
+        <ng-container *ngFor="let item of menuItems">
+          <a class="nav-link" routerLink="{{item.routerLink === '#'? currentRoute : item.routerLink}}" (click)="item.children && item._collapsed = !item._collapsed" [ngClass]="{'collapsed': !item._collapsed && currentParentName != item.name, 'active': currentRouteName == item?.name || currentParentName == item.name}">
+            <div class="sb-nav-link-icon">
+              <i class="{{item.icon}}"></i>
+            </div>
+            {{item.title}}
+            <div class="sb-sidenav-collapse-arrow" *ngIf="item.children">
+              <i class="fas fa-angle-down"></i>
+            </div>
+          </a>
+          <ng-container *ngIf="item.children">
+            <div class="collapse" [ngClass]="{'show': item._collapsed || currentParentName == item.name}">
+              <nav class="sb-sidenav-menu-nested nav">
+                  <a  *ngFor="let child of item.children" class="nav-link"  routerLink="{{child.routerLink}}" [ngClass]="{'active': currentRouteName == child?.name}">
+                    <div class="sb-nav-link-icon">
+                      <i class="{{child.icon}}"></i>
+                    </div>
+                    {{child.title}}
+                  </a>
+              </nav>
+          </div>
+          </ng-container>
+        </ng-container>
+
+      </div>
+    </div>
+    <div class="sb-sidenav-footer">
+      <div class="small">Logged in as:</div>
+      {{nameOfUser}}
+    </div>
+  </nav>
+</div>

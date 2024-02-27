@@ -1,0 +1,11 @@
+.check-selector {
+    background-color: #fcfdd4;
+    padding: 0;
+    text-align: center;
+}
+.check-selector > label {
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    margin-bottom: 0;
+}

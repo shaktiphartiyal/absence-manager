@@ -1,0 +1,18 @@
+<div class="form-group" [ngClass]="{'row': inLine}">
+    <div class="{{labelClass}}" *ngIf="label">
+        <label>
+            {{label}}:<span class="required" *ngIf="required">*</span>
+        </label>
+    </div>
+    <div class="{{inputClass}}">
+        <div style="display: flex">
+            <textarea class="system-control" [tabIndex]="tabIndex" [placeholder]="placeholder" rows="{{rows}}" cols="{{cols}}" [readonly]="readOnly" [ngClass]="{'validation-border': (!txtArea.valid && formRef?.submitted)}" #txtArea="ngModel" [disabled]="disabled" [attr.maxLength]="maxLength? maxLength:null" [(ngModel)]="value" [required]="required" style="height: 100%;"> </textarea>
+            <span *ngIf="iconTooltip" style="padding:30px 0px 0px 5px;" data-toggle="tooltip" [attr.data-placement]="'top'" [attr.data-original-title]="iconTooltip" title="{{iconTooltip}}" class="icon-basic_information_2 info-icon"></span>
+        </div>
+        <div class="row" [hidden]="!(!txtArea.valid && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">This field is required.</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="form-group" [ngClass]="{'row': inLine}">
+    <div *ngIf="label" class="{{labelClass}}">
+        <label>
+            {{label}}:<span class="required" *ngIf="required">*</span>
+        </label>
+    </div>
+    <div class="{{inputClass}}">
+        <div style="display:flex;">
+            <select
+                    class="system-control"
+                    name=""
+                    [tabIndex]="tabIndex"
+                    (valueChange)="valueChange($event)"
+                    (selectionChange)="selectionChange($event)"
+                    [ngClass]="{'validation-border': (!ddl.valid && formRef?.submitted)}"
+                    #ddl="ngModel"
+                    required="{{required}}"
+                    [disabled]="readOnly"
+                    [(ngModel)]="value"
+                    id="ddl{{elementId}}"
+                    [attr.placeholder]="placeholder"
+            >
+                <option *ngFor="let datum of data; let i = index;" [value]="datum.value" [disabled]="datum?.disabled === true">
+                    {{datum.name}}
+                </option>
+            </select>
+            <span *ngIf="iconTooltip" style="padding:7px 0px 0px 5px;" data-toggle="tooltip" [attr.data-placement]="'top'" [attr.data-original-title]="iconTooltip" title="{{iconTooltip}}" ><i class="fa fa-info-circle"></i></span>
+        </div>
+        <div class="row" [hidden]="!(!ddl.valid && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">This field is required.</span>
+            </div>
+        </div>
+    </div>
+</div>

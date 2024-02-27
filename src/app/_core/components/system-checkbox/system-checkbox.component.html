@@ -1,0 +1,26 @@
+<div  class="form-group" [ngClass]="{'row': inLine}">
+    <div class="{{labelClass}}" *ngIf="label && !labelOnRight">
+        <label>
+            {{label}}:<span class="required" *ngIf="required">*</span>
+        </label>
+        <span *ngIf="iconTooltip" title="{{iconTooltip}}" class="icon-basic_information_2 info-icon"></span>
+    </div>
+    <div class="{{inputClass}}">
+        <div class="row">
+            <div [ngClass]="{'validation-border': (!!errorsExist && formRef?.submitted)}" class="col-auto system-checkbox-container" *ngFor="let option of options">
+                <label for="{{elementId}}-{{option.value}}">{{option.key}}&nbsp;<input id="{{elementId}}-{{option.value}}" type="checkbox" [attr.checked]="option.selected === true ? '' : null" [readonly]="readOnly" [disabled]="disabled" (change)='handleChange(option, $event)'/></label>
+            </div>
+        </div>
+
+        <span *ngIf="labelOnRight">
+            &nbsp;
+            <label>{{label}}</label>
+        </span>
+        <div class="row" [hidden]="!(!!errorsExist && formRef?.submitted)">
+            <div class="col-md-12">
+                <span class="validation-message">This field is required.</span>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden"  #chkBox="ngModel" [ngModel]="value"/>

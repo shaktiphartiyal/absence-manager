@@ -1,0 +1,126 @@
+<div class="row">
+    <div class="col-md-12">
+      <system-data-box [loading]="loadingState" [title]="'Leave Approvals'" [addButton]="false" [customButtons]="customButtons" (onCustomButtonClick)="handleOnCustomButtomClick($event)">
+        <div class="table-responsive">
+          <system-grid
+            #leaveApprovalGrid
+            [data]="gridData.data"
+            [columns]="gridData.columns"
+            [tableClass]="'table table-sm'"
+            [gridConfig]="gridData.config"
+            [total]="gridData.total"
+            (onPageChange)="onPageChange($event)"
+            (onSort)="onSort($event)"
+        >
+          <tr *ngFor="let data of gridData.data" (click)="onRowClick(data)">
+            <td (click)="$event.stopPropagation();" class="check-selector">
+              <label  for="ar-{{data.leave_id}}">
+                <input id="ar-{{data.leave_id}}" class="grid-record-selector select-leave-checkbox" type="checkbox" (change)="selectLeave($event, data)"/>
+              </label>
+            </td>
+            <td>{{data.signum}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.leave_date | systemDate}}</td>
+            <td>{{data.team_name}}</td>
+            <td>{{data.applied_on | systemDate}}</td>
+            <td>
+              <button title="Reject" class="btn btn-danger system-grid-btn" (click)="$event.stopPropagation(); singleRejectLeave(data)" type="button">
+                <i class="fa fa-times-circle"></i>
+              </button>
+              &nbsp;
+              <button title="Approve" class="btn btn-success system-grid-btn" (click)="$event.stopPropagation(); singleApproveLeave(data)" type="button">
+                <i class="fa fa-check-circle"></i>
+              </button>
+            </td>
+          </tr>
+        </system-grid>
+        </div>
+      </system-data-box>
+    </div>
+  </div>
+
+
+  <system-popup-container
+  *ngIf="popupOpen"
+  [customButtons]="popupCustomButtons"
+  (onCancel)="handleOnPopupCancel()"
+  (onCustomButtonClick)="handleOnPopupCustomButtomClick($event, laForm)"
+  [title]="popupTitle"
+  [formRef]="laForm"
+  [width]="'700px'"
+  [saveButton]="false"
+
+>
+<form #laForm="ngForm" (ngSubmit)="laForm.form.valid && handleOnPopupSave()">
+  <ng-container *ngIf="!!singleSelectedLeave; else bulkOperationSection">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group row">
+          <div class="col-md-4">
+            Date applied for:
+          </div>
+          <div class="col-md-8">
+            Friday 31/12/2024
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <system-textarea
+        name="providedReson"
+        [formRef]="laForm"
+        [(ngModel)]="singleSelectedLeave.reason"
+        [required]="false"
+        [readOnly]="true"
+        [label]="'Provided reason'"
+        [labelClass]="'col-md-4'"
+        [inputClass]="'col-md-8'"
+        ></system-textarea>
+        </div>  
+    </div>
+  </ng-container>
+  <ng-template #bulkOperationSection>
+    <div class="row">
+      <div class="col-md-12">
+        You are about to perform bulk action on the following leaves: 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" style="height: 200px; overflow: auto;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Signum</th>
+              <th>Date</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let leave of selectedLeaves">
+              <td>{{leave.name}}</td>
+              <td>{{leave.signum}}</td>
+              <td>{{leave.leave_date | systemDate}}</td>
+              <td>{{leave?.reason ?? 'N/A'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+  <div class="row">
+    <div class="col-md-12">
+      <system-textarea
+      name="approverReson"
+      [formRef]="laForm"
+      [(ngModel)]="approverReason"
+      [required]="false"
+      [label]="'Approve / Reject Reason'"
+      [labelClass]="'col-md-4'"
+      [inputClass]="'col-md-8'"
+      ></system-textarea>
+      </div>  
+  </div>
+</form>
+</system-popup-container>

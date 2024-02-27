@@ -1,0 +1,36 @@
+<div
+    #popupComponent
+    class="show modal fade modal-style" tabindex="-1" role="dialog"
+    style="display: block"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document"
+       [style.maxWidth]="!!width ? width:'500px'"
+       [style.width]="width"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="col-md-4">
+          <h4 class="modal-title" id="exampleModalLongTitle">{{title}}</h4>
+        </div>
+        <div class="col-md-8 text-right">
+          <button *ngIf="addButton" [disabled]="loading" (click)="emitAddClick()" type="button" class="btn btn-sm btn-warning data-box-control-btn mr-1"><i class="fa" [ngClass]="loading ? 'fa-cog fa-spin' : 'fa-plus'"></i> Add</button>
+          <button *ngIf="saveButton" [disabled]="loading" (click)="emitSaveClick()" type="button" class="btn btn-sm btn-success data-box-control-btn mr-1"><i class="fa" [ngClass]="loading ? 'fa-cog fa-spin' : 'fa-save'"></i> {{editMode?'Update':'Save'}}</button>
+          <ng-container *ngFor="let customButton of customButtons">
+            <button *ngIf="customButton.show" [disabled]="customButton.disabled" (click)="emitCustomButtonEvent(customButton.clickEventId)" type="button" class="{{customButton.buttonClass}}" title="{{customButton?.buttonText}}"><i *ngIf="customButton.showButtonIcon" class="{{customButton?.buttonIconClass}}"></i> <ng-container *ngIf="customButton.showButtonText">&nbsp;{{customButton?.buttonText}}</ng-container></button>
+          </ng-container>
+          <button *ngIf="cancelButton"  [disabled]="loading" (click)="emitCancelClick()" type="button" class="btn btn-sm btn-danger data-box-control-btn mr-1"><i class="fa fa-times"></i> Cancel</button>
+        </div>
+
+      </div>
+      <div class="modal-body">
+        <fieldset [disabled]="disabled">
+        <ng-content></ng-content>
+        </fieldset>
+      </div>
+<!--      <div class="modal-footer">
+        <button *ngIf="!singleButton" type="button" class="btn btn-secondary btn-sm" (click)="closePopUp(false)">{{falseButton}}</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="closePopUp(true)">{{trueButton}}</button>
+      </div>-->
+    </div>
+  </div>
+</div>

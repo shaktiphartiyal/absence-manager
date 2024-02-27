@@ -1,0 +1,29 @@
+<div class="wrapper">
+    <div class="logo">
+        <img src="assets/images/logo.png" alt="">
+    </div>
+    <div class="text-center mt-4 name">
+        {{appName}}
+    </div>
+    <div class="text-center error-message">
+        {{!!this.error ? error : ''}}
+    </div>
+    <form #loginForm="ngForm" (ngSubmit)="loginForm.form.valid && login(loginForm)" class="p-3" autocomplete="off">
+        <div [ngClass]="{'error-border': loginForm.submitted && !email.valid}" class="form-field d-flex align-items-center">
+            <span class="bi bi-person"></span>
+            <input autofocus role="presentation" type="email" name="email" id="email" placeholder="Username / Email" autocomplete="off" [(ngModel)]="model.email" #email="ngModel" required>
+        </div>
+        <div [ngClass]="{'error-border': loginForm.submitted && !password.valid}" class="form-field d-flex align-items-center">
+            <span class="bi bi-key"></span>
+            <input role="presentation" type="password" name="password" id="password" placeholder="*******" autocomplete="off" [(ngModel)]="model.password" #password="ngModel" required>
+        </div>
+        <button [disabled]="loadingState" type="submit" class="btn mt-3">Login
+            <span *ngIf="loadingState">
+                <system-loader></system-loader>
+              </span>
+        </button>
+    </form>
+    <div class="text-center fs-6">
+        <a href="#">Forgot password?</a>
+    </div>
+</div>

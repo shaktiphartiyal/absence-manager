@@ -1,0 +1,23 @@
+<div  class="form-group" [ngClass]="{'row': inLine}">
+    <div *ngIf="label" class="{{labelClass}}">
+        <label>
+            {{label}}:<span class="required" *ngIf="required">*</span>
+        </label>
+    </div>
+    <div class="{{inputClass}}">
+        <div class="row">
+            <div class="col-auto" [ngStyle]="{'display': inline ? 'inline' : '' }" *ngFor="let item of options">
+                <label class="system-radio-container">
+                    <input 
+                    type="radio" 
+                    [value]="item.value"
+                    [ngModel]="value"
+                    (ngModelChange)="change($event)"
+                    name="{{elementId}}"
+                    /><span>{{item.key}}</span>
+                    <span class="checkmark" (click)="onChange($event)"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

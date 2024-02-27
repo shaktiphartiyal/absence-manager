@@ -1,0 +1,66 @@
+<div class="table-responsive">
+  <table class="{{tableClass}}" class="system-grid" [ngClass]="{'clickable': gridConfig.rowsClickable==true}">
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns" [attr.width]="column?.width ? column.width : null">
+        <span class="table-column-holder" [ngClass]="{'sort-header': column.sortable==true}" (click)="column.sortable && doSort(column)">
+          {{column.name}} <ng-container *ngIf="column?.selector"><input type="checkbox" class="grid-all-record-selector" (change)="toggleGridSelection($event)"/></ng-container>
+          <ng-container *ngIf="column.sortable">
+            <span *ngIf="column?.sort=='asc'">
+              &#8642;
+              <!-- down -->
+            </span>
+            <span *ngIf="column?.sort=='desc'">
+              &#8638;
+              <!-- up-->
+            </span>
+            <span *ngIf="column?.sort!='desc' && column?.sort!='asc'">
+              &#8645;
+              <!-- up-down -->
+            </span>
+          </ng-container>
+        </span>
+        <!-- <ng-container *ngIf="column?.filterable">
+          <span class="filter-menu-span" (click)="toggleFilterBar()">
+            <i class="fa fa-bars"></i>
+          </span>
+        </ng-container> -->
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-content>
+    </ng-content>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td [colSpan]="columns.length">
+        <div class="pagination">
+          <a href="javascript:void(0);" (click)="first()">&laquo;</a>
+          <a href="javascript:void(0);" (click)="previous()">&#9667;</a>
+          <a *ngFor="let pageNo of paginationArray" href="javascript:void(0);" [ngClass]="{'active' : currentPage==pageNo}" (click)="navigateTo(pageNo)">{{pageNo}}</a>
+          <a href="javascript:void(0);" (click)="next()">&#9657;</a>
+          <a href="javascript:void(0);" (click)="last()">&raquo;</a>
+          &nbsp;
+          <span *ngIf="recordsShown"> Showing {{recordsShown}} of {{total}} records</span>
+          <span> Show
+            <select [(ngModel)]="gridConfig.maxRows" (change)="updateMaxRows()">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="40">40</option>
+              <option value="50">50</option>
+              <option value="60">60</option>
+              <option value="70">70</option>
+              <option value="80">80</option>
+              <option value="90">90</option>
+              <option value="100">100</option>
+            </select>
+            records
+          </span>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+  </table>
+</div>

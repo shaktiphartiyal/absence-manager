@@ -1,0 +1,100 @@
+<div class="row" *ngIf="isAdmin else nonAdmin">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-6">
+                <system-dropdown-list
+                [(ngModel)]="selectedTeam"
+                [label]="'Select team'"
+                name="select-team"
+                [data]="allTeams"
+                [labelClass]="'col-md-3'"
+                [inputClass]="'col-md-9'"
+                ></system-dropdown-list>
+            </div>
+            <div class="col-md-6">
+                <system-dropdown-list
+                [(ngModel)]="selectedMonth"
+                [label]="'Select month'"
+                name="select-month"
+                [data]="months"
+                [labelClass]="'col-md-3'"
+                [inputClass]="'col-md-9'"
+                ></system-dropdown-list>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+<ng-template #nonAdmin>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="row">
+                <system-dropdown-list
+                [(ngModel)]="selectedMonth"
+                [label]="'Select month'"
+                name="select-month"
+                [data]="months"
+                [labelClass]="'col-md-3'"
+                [inputClass]="'col-md-9'"
+                ></system-dropdown-list>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</ng-template>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 d-flex justify-content-center">
+        <div [ngClass]="isAdmin ? 'col-md-6' : ''">
+            <button class="btn btn-primary" type="button" (click)="loadTeamCalendar()" [disabled]="loadCalendarButtonDisabled">View calendar</button>
+        </div>
+        <div class="col-md-6">
+            <button *ngIf="isAdmin" class="btn btn-warning" type="button" (click)="downloadLeavePlan()" [disabled]="generatingReport">
+                <i class="fa" [ngClass]="generatingReport ? 'fa-cog fa-spin' : 'fa-download'"></i>&nbsp; Download Leave Plan
+            </button>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12 d-flex justify-content-center">
+        <h3>Team leaves for the month of {{displayMonthName}} {{selectedYear}}</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Signum</th>
+                    <th *ngFor="let date of datesWithWeekDays" class="text-center cell">{{date.day}}<br>{{date.date}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let member of teamLeaves">
+                    <td>{{member.name}}</td>
+                    <td>{{member.signum}}</td>
+                    <ng-container *ngFor="let date of datesWithWeekDays; let i = index;">
+                        <ng-container *ngIf="getLeave(member.leaves, i+1); then thenBlock else elseBlock"></ng-container>
+                        <ng-template #thenBlock>
+                            <td class="text-center cell" [ngClass]="getLeaveStatus(member.leaves, i+1) == 'APPROVED' ? 'approved' : 'applied'"></td>
+                        </ng-template>
+                        <ng-template #elseBlock><td></td></ng-template>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+</div>
+<div class="row">
+    <div class="col col-12 pb-4">
+        <div class="legend">
+            <span class="cell applied"></span> <i>Applied</i>&nbsp;
+            <span class="cell approved"></span> <i>Approved</i>&nbsp;           
+        </div>
+    </div>
+</div>

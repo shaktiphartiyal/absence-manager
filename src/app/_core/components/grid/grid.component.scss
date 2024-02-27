@@ -1,0 +1,50 @@
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+.pagination span {
+  color: black;
+  padding: 8px 16px;
+}
+
+
+.pagination a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.clickable tr {
+  cursor: pointer;
+}
+
+.clickable tr:hover {
+  background-color: #dedede;
+}
+
+.table-column-holder {
+  user-select: none;  
+}
+
+.sort-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.system-grid-btn {
+    padding: 0.20rem 0.2rem;
+    font-size: 0.8rem;
+    line-height: 0.8;
+    border-radius: 0.2rem;
+}
+
+.filter-menu-span{
+  float: right;
+  color: #7d7d7d;
+  cursor: pointer;
+}
