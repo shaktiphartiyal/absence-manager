@@ -5,6 +5,9 @@
     <div class="col col-2">
         <button class="btn btn-warning" (click)="cancelSelectedLeaves()" [ngClass]="{'disabled': selectedDates.length === 0 || cancelLeavesDisabled}" [disabled]="selectedDates.length === 0">Cancel selected leaves</button>
     </div>
+    <div class="col col-2 pt-2" *ngIf="loading">
+        <strong>Loading</strong>&nbsp;<system-loader></system-loader>
+    </div>
 </div>
 <hr>
 <app-calendar

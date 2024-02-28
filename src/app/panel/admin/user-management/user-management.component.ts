@@ -13,6 +13,7 @@ import { ApiService, AppConfig, ToastService } from "src/app/_core";
 export class UserManagementComponent extends BaseListComponent {
 
   public editMode:boolean = false;
+  public apiLoading: boolean = false;
 
   @ViewChild('userGrid', { static: true }) userGrid!: GridComponent;
 
@@ -156,6 +157,7 @@ export class UserManagementComponent extends BaseListComponent {
         this.loading(false);
       }
     });
+    this.loadManagers();
   }
 
 
@@ -236,6 +238,7 @@ export class UserManagementComponent extends BaseListComponent {
 
   handleOnPopupSave()
   {
+    this.apiLoading = true;
     this.loading();
     let request = this.api.post(`/users`, this.model);
     if(this.editMode)
@@ -246,10 +249,12 @@ export class UserManagementComponent extends BaseListComponent {
       next: (response: any) => {
         this.toaster.success(response.message);
         this.handleOnAddClose();
+        this.apiLoading = false;
       },
       error: (err: any) => {
         this.toaster.error(err.message);
         this.loading(false);
+        this.apiLoading = false;
       },
       complete: () => {
         this.loading(false);

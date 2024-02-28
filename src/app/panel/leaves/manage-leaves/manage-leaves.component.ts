@@ -133,8 +133,8 @@ export class ManageLeavesComponent {
           next: (response: any) => {
             this.toaster.success(response.message);
             this.handleOnPopupClose();
-            this.loadLeaves();
             this.loading = false;
+            this.loadLeaves();
           },
           error: (err: any) => {
             this.toaster.error(err.message);
@@ -154,6 +154,7 @@ export class ManageLeavesComponent {
     this.approvedLeaves = [];
     this.rejectedLeaves = [];
     this.calendar.refresh();
+    this.loading = true;
     this.api.get(`/leaves/${this.selectedYear}`).subscribe({
       next: (response: any) => {
         this.appliedLeaves, this.approvedLeaves, this.rejectedLeaves = [];
@@ -173,9 +174,11 @@ export class ManageLeavesComponent {
             this.rejectedLeaves.push(leave.leave_date);
           }
         }
+        this.loading = false;
       },
       error: (err: any) => {
         this.toaster.error('Unable to load leaves!');
+        this.loading = false;
       },
       complete: () => {
 

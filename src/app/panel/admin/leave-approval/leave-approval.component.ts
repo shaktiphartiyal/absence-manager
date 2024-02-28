@@ -294,6 +294,7 @@ export class LeaveApprovalComponent extends BaseListComponent{
   private send_approve_call(leaves: Array<any>, reason: string|undefined = undefined)
   {
     const leavesToApprove = leaves.map(x => x.leave_id);
+    this.customButtons.map(x => x.disabled = true);
     this.loading();
     this.subscriptions['lac'] = this.api.post(`/leave-approval/approve`, {
       leaves: leavesToApprove,
@@ -302,10 +303,12 @@ export class LeaveApprovalComponent extends BaseListComponent{
       next: (response: any) => {
         this.toaster.success(response.message);
         this.loadDataForList();
+        this.customButtons.map(x => x.disabled = false);
       },
       error: (err: any) => {
         this.loading(false);
         this.toaster.error(err.message);
+        this.customButtons.map(x => x.disabled = false);
       },
       complete: () => {
         this.loading(false);
@@ -316,6 +319,7 @@ export class LeaveApprovalComponent extends BaseListComponent{
   private send_reject_call(leaves: Array<any>, reason: string|undefined = undefined)
   {
     const leavesToReject = leaves.map(x => x.leave_id);
+    this.customButtons.map(x => x.disabled = true);
     this.loading();
     this.subscriptions['lrc'] = this.api.post(`/leave-approval/reject`, {
       leaves: leavesToReject,
@@ -324,10 +328,12 @@ export class LeaveApprovalComponent extends BaseListComponent{
       next: (response: any) => {
         this.toaster.success(response.message);
         this.loadDataForList();
+        this.customButtons.map(x => x.disabled = false);
       },
       error: (err: any) => {
         this.loading(false);
         this.toaster.error(err.message);
+        this.customButtons.map(x => x.disabled = false);
       },
       complete: () => {
         this.loading(false);

@@ -48,11 +48,17 @@
     <div class="col-md-4"></div>
     <div class="col-md-4 d-flex justify-content-center">
         <div [ngClass]="isAdmin ? 'col-md-6' : ''">
-            <button class="btn btn-primary" type="button" (click)="loadTeamCalendar()" [disabled]="loadCalendarButtonDisabled">View calendar</button>
+            <button class="btn btn-primary" type="button" (click)="loadTeamCalendar()" [disabled]="loadCalendarButtonDisabled || loading">View calendar<span *ngIf="loading">
+                &nbsp;
+                <system-loader></system-loader>
+            </span></button>
         </div>
         <div class="col-md-6">
-            <button *ngIf="isAdmin" class="btn btn-warning" type="button" (click)="downloadLeavePlan()" [disabled]="generatingReport">
-                <i class="fa" [ngClass]="generatingReport ? 'fa-cog fa-spin' : 'fa-download'"></i>&nbsp; Download Leave Plan
+            <button *ngIf="isAdmin" class="btn btn-warning" type="button" (click)="downloadLeavePlan()" [disabled]="generatingReport || loading">
+                <i class="fa" [ngClass]="generatingReport ? 'fa-cog fa-spin' : 'fa-download'"></i>&nbsp; Download Leave Plan<span *ngIf="loading">
+                    &nbsp;
+                    <system-loader></system-loader>
+                </span>
             </button>
         </div>
     </div>

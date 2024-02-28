@@ -15,7 +15,7 @@ import { ApiService, AppConfig, ToastService } from "src/app/_core";
 export class TeamManagementComponent extends BaseListComponent
 {
 
-
+  public apiLoading: boolean = false;
   public editMode:boolean = false;
 
   @ViewChild('teamGrid', { static: true }) teamGrid!: GridComponent;
@@ -164,6 +164,7 @@ export class TeamManagementComponent extends BaseListComponent
 
   handleOnPopupSave()
   {
+    this.apiLoading = true;
     this.loading();
     let request = this.api.post(`/teams`, this.model);
     if(this.editMode)
@@ -174,10 +175,12 @@ export class TeamManagementComponent extends BaseListComponent
       next: (response: any) => {
         this.toaster.success(response.message);
         this.handleOnAddClose();
+        this.apiLoading = false;
       },
       error: (err: any) => {
         this.toaster.error(err.message);
         this.loading(false);
+        this.apiLoading = false;
       },
       complete: () => {
         this.loading(false);

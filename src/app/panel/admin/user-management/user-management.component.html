@@ -49,6 +49,7 @@
       [formRef]="tdForm"
       [width]="'700px'"
       [saveButton]="true"
+      [loading]="apiLoading"
   >
     <form #tdForm="ngForm" (ngSubmit)="tdForm.form.valid && handleOnPopupSave()">
       <div class="row">

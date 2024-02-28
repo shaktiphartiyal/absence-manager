@@ -14,6 +14,7 @@ export class TeamCalendarComponent implements OnInit {
   public selectedMonth: number = new Date().getMonth()+1;
   public selectedTeam: number = 0;
   public selectedYear: number = new Date().getFullYear();
+  public loading: boolean = false;
 
   public months: Array<any> = [
     {
@@ -148,12 +149,15 @@ export class TeamCalendarComponent implements OnInit {
     {
       url = `/leaves/team-leaves/${this.selectedYear}/${this.selectedMonth}/${this.selectedTeam}`;
     }
+    this.loading = true;
     this.api.get(url).subscribe({
       next: (response: any) => {
         this.teamLeaves = response.data;
+        this.loading = false;
       },
       error: (err: any) => {
         this.toaster.error(err.message);
+        this.loading = false;
       },
       complete: () => {
 
