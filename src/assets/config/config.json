@@ -1,5 +1,5 @@
 {
-    "appName": "ABSENCE MANAGER",
+    "appName": "VACATION MANAGER",
     "apiUrl": "https://localhost:8080/api",
     "cacheKey": "abman",
     "dateFormat": "dd/MM/y"

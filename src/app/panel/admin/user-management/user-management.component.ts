@@ -105,6 +105,38 @@ export class UserManagementComponent extends BaseListComponent {
 
   public isAdmin = false;
 
+
+  public bulkAddResponse: Array<any> = [];
+  public csvHasErrors = false;
+  public csvErrors: Array<string> = ['Please select a file.'];
+  public fileValid:any = '';
+  private csvData: Array<any> = [];
+  public bulkFile: File | string = '';
+  public bulkAddPopup: boolean = false;
+  public customButtons: Array<{
+    show: boolean,
+    disabled: boolean,
+    clickEventId: string,
+    buttonClass:string,
+    showButtonIcon: boolean,
+    buttonIconClass?: string,
+    showButtonText: boolean,
+    buttonText?: string
+    }> = [
+    {
+      show: true,
+      disabled: false,
+      clickEventId: 'BULK_USER_UPLOAD',
+      buttonClass: 'btn btn-sm btn-warning data-box-control-btn mr-1',
+      showButtonIcon: true,
+      buttonIconClass: 'fa fa-users',
+      showButtonText: true,
+      buttonText: 'Bulk upload'
+    }
+  ];
+
+
+
   constructor(
     protected activatedRoute: ActivatedRoute,
     api: ApiService,
@@ -276,4 +308,127 @@ export class UserManagementComponent extends BaseListComponent {
   {
     this.loadUsers();
   }
+
+  public handleOnCustomButtomClick(eventId: string)
+  {
+    this.fileValid = '';
+    this.csvErrors = ['Please select a file.'];
+    this.bulkFile = '';
+    this.bulkAddPopup = true;
+  }
+
+  handleOnBulkAddClose()
+  {
+    this.bulkAddPopup = false;
+    this.loadUsers();
+    this.bulkAddResponse = [];
+  }
+
+  handleOnBulkPopupSave()
+  {
+    this.bulkAddResponse = [];
+    this.apiLoading = true;
+    this.loading();
+    this.customButtons.map(x => x.disabled = true);
+    this.subscriptions['uba'] = this.api.post(`/users/bulk-add`, {users: this.csvData}).subscribe({
+      next: (response: any) => {
+        try
+        {
+          for(let data of response.data.successfulEntries)
+          {
+            this.bulkAddResponse.push(`Success: ${data.username}/${data.signum} created with id #${data.id}`);
+          }
+        }
+        catch(e)
+        {
+          this.toaster.success('Bulk users added.');
+        }
+        this.fileValid = '';
+        this.bulkFile = '';
+      },
+      error: (err: any) => {
+        this.bulkAddResponse.push(`Error: ${err.message}`);
+        this.loading(false);
+        this.apiLoading = false;
+        this.customButtons.map(x => x.disabled = false);
+      },
+      complete: () => {
+        this.apiLoading = false;
+        this.loading(false);
+        this.customButtons.map(x => x.disabled = false);
+      }
+    });
+  }
+
+  public onFileSelected(event: any): void {
+    this.csvData = [];
+    this.fileValid = '';
+    const file = event.target.files[0];
+    if (file) {
+      this.csvErrors = [];
+      if(file.name.endsWith('.csv') && file.type == "text/csv")
+      {
+        this.parseCsv(file);
+      }
+      else
+      {
+        this.csvHasErrors = true;
+        this.csvErrors.push('Invalid file selected.');
+      }
+    }
+  }
+
+  private parseCsv(file: Blob)
+  {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const csvData = e.target.result;
+      this.processCSVData(csvData);
+    };
+    reader.readAsText(file);
+  }
+
+  private processCSVData(csvData: string): void {
+    this.csvHasErrors = false;
+    const rows = csvData.split('\n');
+    const headers = rows[0].split(',');
+    if(headers.length != 8)
+    {
+      this.csvErrors.push('Incorrect number of headers');
+      this.csvHasErrors = true;
+    }
+    if(headers[0] !== 'name' || headers[1] !== 'signum' || headers[2] !== 'username' || headers[3] !== 'password' || headers[4] !== 'is_admin' || headers[5] !== 'status' || headers[6] !== 'manager_signum' || headers[7] !== 'team')
+    {
+      this.csvErrors.push('Incorrect csv headers');
+      this.csvHasErrors = true;
+    }
+    for (let i = 1; i < rows.length; i++)
+    {
+      const rowData = rows[i].split(',');
+      if(rowData.length != 8)
+      {
+        this.csvErrors.push(`Inconsistent data at record ${i}`);
+        this.csvHasErrors = true;
+      }
+      else
+      {
+        this.csvData.push({
+          name: rowData[0],
+          signum: rowData[1],
+          username: rowData[2],
+          password: rowData[3],
+          is_admin: rowData[4],
+          status: rowData[5],
+          manager_signum: rowData[6],
+          team_name: rowData[7]
+        })
+      }
+    }
+    if(this.csvHasErrors)
+    {
+      return;
+    }
+    this.fileValid = true;
+  }
+
 }

@@ -1,6 +1,13 @@
 <div class="row">
     <div class="col-md-12">
-      <system-data-box [loading]="loadingState" [title]="'Users'" [addButton]="true" (onAdd)="handleOnAdd();">
+      <system-data-box
+      [loading]="loadingState"
+      [title]="'Users'"
+      [addButton]="true"
+      (onAdd)="handleOnAdd();"
+      [customButtons]="customButtons"
+      (onCustomButtonClick)="handleOnCustomButtomClick($event)"
+      >
         <div class="table-responsive">
           <system-grid
             #userGrid
@@ -157,6 +164,96 @@
           [labelClass]="'col-md-3'"
           [inputClass]="'col-md-9'"
           ></system-dropdown-list>
+      </div>
+    </form>
+  </system-popup-container>
+
+
+  <system-popup-container
+      [editMode]="false"
+      *ngIf="bulkAddPopup"
+      (onCancel)="handleOnBulkAddClose()"
+      [title]="'Bulk user upload'"
+      [formRef]="ubuForm"
+      [width]="'800px'"
+      [saveButton]="true"
+      [loading]="apiLoading"
+      [disabled]="apiLoading"
+  >
+    <form #ubuForm="ngForm" (ngSubmit)="ubuForm.form.valid && handleOnBulkPopupSave()">
+      <div class="row">
+        <div class="col-md-12">
+          <strong>Note:</strong> Active users with same email / signum will not be added and ignored!
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-md-12">
+            <strong>Suported file: csv in the below format</strong>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <code>
+name,signum,username,password,is_admin,status,manager_signum,team_name<br/>
+John Doe,eabcdef,john.doe@example.com,password,1,1,eghijkl,DTX<br/>
+Jane Doe,epoiuyt,jane.doe@example.com,password,0,1,eghijkl,
+            </code>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <ul>
+              <li>
+                All fields are mandatory, except team_name which can be left empty if no team is to be assigned.
+              </li>
+              <li>
+                <strong>is_admin</strong> possible values can be 1 for admin or 0 for normal user.
+              </li>
+              <li>
+                <strong>status</strong> possible values can be 1 for active or 0 for inactive user.
+              </li>
+              <li>
+                <strong>Note:</strong> Users are created sequentially, please ensure that the manager entry preceeds the users under him/her
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr>
+      <div class="row mt-2">
+        <div class="col-md-3">
+          Select File
+        </div>
+        <div class="col-md-5">
+          <input type="file" name="bulkFile" (change)="onFileSelected($event)" [(ngModel)]="bulkFile" [required]="true"/>
+          <input type="hidden" name="fileValid" [(ngModel)]="fileValid" [required]="true">
+        </div>
+        <div class="col-md-4">
+          <span *ngIf="(bulkFile && !fileValid) && !csvHasErrors"><system-loader></system-loader> Validating file, please wait</span>
+          <span *ngIf="bulkFile && fileValid"><i class="fa fa-check-circle" style="color: green;"></i> File Valid</span>
+        </div>
+      </div>
+      <div class="row mt-2" *ngIf="csvErrors.length > 0">
+        <div class="col-md-12">
+          <div class="alert alert-danger" role="alert">
+            <ul>
+              <li *ngFor="let error of csvErrors">
+                {{error}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2" *ngIf="bulkAddResponse.length > 0">
+        <div class="col-md-12">
+          <div class="alert alert-primary" role="alert">
+            <ul>
+              <li *ngFor="let data of bulkAddResponse">
+                {{data}}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </form>
   </system-popup-container>
