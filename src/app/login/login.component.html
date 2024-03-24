@@ -23,7 +23,46 @@
               </span>
         </button>
     </form>
-    <!-- <div class="text-center fs-6">
-        <a href="#">Forgot password?</a>
-    </div> -->
+    <div class="text-center fs-6">
+        <a href="javascript:void(0);" (click)="triggerForgotPassword();">Forgot password?</a>
+    </div>
 </div>
+
+<system-popup-container
+*ngIf="forgotPopupOpen"
+[title]="'Forgot password'"
+[formRef]="fpForm"
+[width]="'600px'"
+[saveButton]="false"
+[cancelButton]="false"
+>
+<form #fpForm="ngForm" (ngSubmit)="fpForm.form.valid && handleOnForgotPassword()">
+    <div class="row">
+        <div class="col-md-12">
+            Enter you email address below and to receive a password reset link.
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+          <system-textbox
+          name="forgotPasswordEmail"
+          [type]="'email'"
+          [formRef]="fpForm"
+          [(ngModel)]="forgotPasswordEmail"
+          [required]="true"
+          [label]="'Email'"
+          [labelClass]="'col-md-2'"
+          [inputClass]="'col-md-8'"
+          ></system-textbox>
+          </div>  
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-6">
+            <button [disabled]="forgotPasswordLoading" type="button" (click)="handleForgotPasswordCancel()" class="btn btn-warning">Cancel</button>
+        </div>
+        <div class="col-md-6">
+            <button [disabled]="forgotPasswordLoading" type="submit" class="btn btn-success"><span *ngIf="forgotPasswordLoading"><i class="fa fa-spin fa-cog"></i>&nbsp;</span>Send reset link</button>
+        </div>
+      </div>
+    </form>
+</system-popup-container>

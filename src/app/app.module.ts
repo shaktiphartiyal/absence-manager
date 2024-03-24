@@ -12,12 +12,14 @@ import { SystemPopupService } from './_core/components/system-popup/system-popup
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { AppInterceptor } from './_core/interceptors/app.interceptor';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     LoginComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,
